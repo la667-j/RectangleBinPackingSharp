@@ -1,0 +1,41 @@
+name: Publish to NuGet
+
+# 触发条件：当你“发布 (Publish)”一个新的 Release 时触发
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 检出代码
+    - uses: actions/checkout@v4
+
+    # 2. 安装 .NET 环境
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '7.0.x' # 或者 '6.0.x', 取决于你的项目需求
+
+    # 3. 还原依赖
+    - name: Restore dependencies
+      run: dotnet restore src/RectangleBinPacking/RectangleBinPacking.csproj
+
+    # 4. 编译项目 (Build)
+    - name: Build
+      run: dotnet build src/RectangleBinPacking/RectangleBinPacking.csproj --configuration Release --no-restore
+
+    # 5. 打包 (Pack)
+    # 这里我们做一个骚操作：直接用 Release 的 Tag 作为版本号，这样你就不需要每次手动改 .csproj 了
+    # 例如：你在 GitHub 打标签 "v1.0.2"，包的版本就会自动变成 "1.0.2"
+    - name: Pack
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "Publising version: $VERSION"
+        dotnet pack src/RectangleBinPacking/RectangleBinPacking.csproj --configuration Release --no-build --output ./nupkg /p:PackageVersion=$VERSION
+
+    # 6. 推送到 NuGet (Push)
+    - name: Push to NuGet
+      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
