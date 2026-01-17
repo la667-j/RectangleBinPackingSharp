@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <PackageId>RectangleBinPack.CSharp</PackageId> 
+    <Version>1.0.0</Version>
+    <Authors>lihua</Authors>
+    <Company>lihua</Company>
+
+    <Description>A high-performance C# port of the MaxRects, Skyline, Guillotine, and Shelf bin packing algorithms.</Description>
+    <PackageTags>bin-packing;nesting;rectpack;maxrects;skyline;2d-packing</PackageTags>
+    
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/la667-j/RectangleBinPackingSharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    </PropertyGroup>
+
+  </Project>

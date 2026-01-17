@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CCF16902-2BC4-4194-A63C-ED9579B4C419}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RectangleBinPacking", "src\RectangleBinPacking\RectangleBinPacking.csproj", "{B12D0931-C6B9-426E-B781-4E10EFF2DE28}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B12D0931-C6B9-426E-B781-4E10EFF2DE28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12D0931-C6B9-426E-B781-4E10EFF2DE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12D0931-C6B9-426E-B781-4E10EFF2DE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12D0931-C6B9-426E-B781-4E10EFF2DE28}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B12D0931-C6B9-426E-B781-4E10EFF2DE28} = {CCF16902-2BC4-4194-A63C-ED9579B4C419}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEB9F392-DECF-4121-AF7D-A57B1B86B093}
+	EndGlobalSection
+EndGlobal
