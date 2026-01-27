@@ -7,14 +7,22 @@
 
 A complete, high-performance C# port of the famous [RectangleBinPack](https://github.com/juj/RectangleBinPack) library by Jukka Jylänki.
 
+> **🆕 New Feature**: Added `SingleBinPack` algorithm specifically optimized for packing large quantities of a single type of rectangle.
+
 ## 📦 Algorithms Included
 
-This library faithfully implements the four core algorithms from the original C++ library:
+This library faithfully implements the core algorithms from the original C++ library, plus a new specialized algorithm:
 
-1.  **MaxRects (MaxRectsBinPack)** - Recommended. Highest packing density.
+1.  **MaxRects (MaxRectsBinPack)** - Recommended. Highest packing density for mixed shapes.
 2.  **Skyline (SkylineBinPack)** - Fastest. Good for runtime packing.
 3.  **Guillotine (GuillotineBinPack)** - Simulates edge-to-edge cuts.
 4.  **Shelf (ShelfBinPack)** - Simple row-based layout.
+5.  **SingleBin (SingleBinPack)** - **[New]** Optimized for mass production of a single part type. Supports mixed horizontal/vertical layouts.
+
+## 🌟 Single Part Packing Examples
+
+The new `SingleBinPack` algorithm is designed to maximize utilization when packing thousands of identical items. It automatically determines the best combination of horizontal and vertical placements.
+| ![Example 1](assets/example1.png) | ![Example 2](assets/example2.png) | ![Example 3](assets/example3.png) | ![Example 4](assets/example4.png) |
 
 ## ⚙️ Algorithm Parameters & Heuristics
 
@@ -79,10 +87,10 @@ Package Manager
 ```PowerShell
 Install-Package RectangleBinPack.CSharp
 ```
-💻 Usage
 
-Basic Example (MaxRects)
-```csharp
+💻 Usage
+1. Basic Example (MaxRects - Mixed Parts)
+```c#
 using System;
 using System.Collections.Generic;
 using RectangleBinPacking;
@@ -117,42 +125,38 @@ public class Program
     }
 }
 ```
-Advanced Example (Skyline with Waste Map)
-```csharp
-using System;
-using System.Collections.Generic;
+
+2. Single Part Example (SingleBinPack)
+```c#
 using RectangleBinPacking;
 
-public class Program
+// 1. Initialize bin size (Width, Height)
+var singlePacker = new SingleBinPack(3000, 1500);
+
+// 2. Pack 500 copies of a 200x100 part
+// The algorithm will automatically decide the optimal mix of horizontal and vertical placements.
+List<Rect> results = singlePacker.Insert(partWidth: 200, partHeight: 100, quantity: 500);
+
+Console.WriteLine($"Successfully packed {results.Count} items.");
+foreach(var rect in results)
 {
-    public static void Main()
-    {
-        // 1. Initialize a 1024x1024 bin, allowing 90-degree rotations
-        var packer = new MaxRectsBinPack(1024, 1024, allowRotations: true);
+    Console.WriteLine($"Part at: {rect.X}, {rect.Y} Size: {rect.Width}x{rect.Height}");
+}
+```
 
-        // 2. Prepare items to pack
-        var items = new List<(int w, int h)> 
-        { 
-            (200, 100), (50, 50), (300, 300), (1000, 500) 
-        };
+3. Advanced Example (Skyline with Waste Map)
+```c#
+// Initialize Skyline packer, enable WasteMap (second arg true) to recover gaps
+var skylinePacker = new SkylineBinPack(2048, 2048, useWasteMap: true);
 
-        // 3. Pack items
-        foreach (var item in items)
-        {
-            Rect result = packer.Insert(item.w, item.h, FreeRectChoiceHeuristic.RectBestShortSideFit);
+Rect node = skylinePacker.Insert(200, 150, SkylineBinPack.LevelChoiceHeuristic.LevelBottomLeft);
 
-            if (result.Height > 0)
-            {
-                Console.WriteLine($"Packed {item.w}x{item.h} at X={result.X}, Y={result.Y}, Rotated={result.Width != item.w}");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to pack {item.w}x{item.h}: Bin is full!");
-            }
-        }
-    }
+if (node.Height > 0)
+{
+    Console.WriteLine($"Skyline Placed at: {node.X}, {node.Y}");
 }
 ```
 📄 License
-
+```
 Released under Public Domain (Unlicense) or MIT. You are free to use, modify, and distribute this software for any purpose, commercial or otherwise.
+```

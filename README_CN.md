@@ -7,14 +7,22 @@
 
 本项目是 Jukka Jylänki 著名的 C++ 库 [RectangleBinPack](https://github.com/juj/RectangleBinPack) 的 **完整 C# 移植版**。
 
+> **🆕 新特性**: 新增了 `SingleBinPack` 算法，专为大批量单一零件的排版进行优化。
+
 ## 📦 包含的算法
 
-本项目忠实还原了原版库中的四大核心算法：
+本项目忠实还原了原版库中的四大核心算法，并增加了一个针对特定场景优化的算法：
 
-1.  **MaxRects (MaxRectsBinPack)** - 推荐首选，利用率最高。
+1.  **MaxRects (MaxRectsBinPack)** - 推荐首选，混合零件排版利用率最高。
 2.  **Skyline (SkylineBinPack)** - 速度最快，适合实时排样。
 3.  **Guillotine (GuillotineBinPack)** - 模拟断头台切割，适合玻璃/金属加工。
 4.  **Shelf (ShelfBinPack)** - 简单的层架式布局。
+5.  **SingleBin (SingleBinPack)** - **[新增]** 针对单一种类零件的大批量排版优化，支持横竖混合排列以达到极致利用率。
+
+## 🌟 单零件排版示例
+
+新的 `SingleBinPack` 算法能够自动计算最佳的行列组合（横排、竖排或混合排），以在板材上放入尽可能多的同种零件。
+| ![Example 1](assets/example1.png) | ![Example 2](assets/example2.png) | ![Example 3](assets/example3.png) | ![Example 4](assets/example4.png) |
 
 ## ⚙️ 算法参数详解
 
@@ -77,15 +85,13 @@
 ```bash
 dotnet add package RectangleBinPack.CSharp
 ```
-
 包管理器 (Package Manager)
 ```PowerShell
 Install-Package RectangleBinPack.CSharp
 ```
 💻 使用示例
-
-基础用法 (MaxRects)
-```csharp
+1. 基础用法 (MaxRects - 混合零件)
+```c#
 using System;
 using System.Collections.Generic;
 using RectangleBinPacking;
@@ -124,8 +130,26 @@ public class Program
     }
 }
 ```
-进阶用法 (Skyline + 废料回收)
-```csharp
+2. 单零件用法 (SingleBinPack)
+当您需要高效排版成千上万个相同尺寸的零件时，请使用此算法。
+```c#
+using RectangleBinPacking;
+
+// 1. 初始化板材尺寸 (宽, 高)
+var singlePacker = new SingleBinPack(3000, 1500);
+
+// 2. 插入 500 个尺寸为 200x100 的零件
+// 算法会自动计算最优的横排/竖排组合方案
+List<Rect> results = singlePacker.Insert(partWidth: 200, partHeight: 100, quantity: 500);
+
+Console.WriteLine($"成功排入 {results.Count} 个零件。");
+foreach(var rect in results)
+{
+    Console.WriteLine($"零件位置: {rect.X}, {rect.Y} 尺寸: {rect.Width}x{rect.Height}");
+}
+```
+3. 进阶用法 (Skyline + 废料回收)
+```c#
 // 初始化 Skyline 打包器，启用 WasteMap (第二个参数 true) 以提高利用率
 // WasteMap 会自动回收天际线下方形成的封闭空间
 var skylinePacker = new SkylineBinPack(2048, 2048, useWasteMap: true);
@@ -138,5 +162,6 @@ if (node.Height > 0)
 }
 ```
 📄 许可证
-
+```
 Public Domain (Unlicense) 或 MIT 协议。您可以随意修改、分发或商用，无需承担任何法律责任（与原版 C++ 库一致）。
+```
