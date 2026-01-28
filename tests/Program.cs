@@ -13,7 +13,7 @@ namespace SingleBinPackTester
             Console.WriteLine("=== 单零件排版算法逻辑验证 ===");
 
             // 测试场景 1: 标准情况 (大板材，小零件)
-            RunTest("Case 1_Standard", binW: 8000, binH: 2200, partW: 1700, partH: 500, qty: 101);
+            RunTest("Case 1_Standard", binW: 6000, binH: 1500, partW: 382, partH: 140, qty: 333);
 
             // 测试场景 2: 需要旋转的情况 (零件高大于宽，需要旋转适配)
             RunTest("Case 2_Rotation", binW: 12000, binH: 2200, partW: 420, partH: 185, qty: 71);
